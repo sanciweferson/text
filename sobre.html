@@ -16,14 +16,15 @@
     </main>
     <script src="js/script.js"></script>
 
-    <script type="module">
-    import { initMenu } from "./js/mobile/menuEvents.js"
-    import { initTheme } from "./js/theme/theme.init.js"
+<script type="module">
+  import { initMenu } from "./js/mobile/menuEvents.js"
+  import { initTheme } from "./js/theme/theme.init.js"
 
-    window.addEventListener("DOMContentLoaded", () => {
-      initTheme()
-      initMenu()
-    })
-  </script>
+  window.onload = () => {
+    initTheme()
+    initMenu() // agora vai abrir o menu corretamente se estava aberto antes
+  }
+</script>
+
   </body>
 </html>
