@@ -36,14 +36,15 @@ export const setupMenuToggle = () => {
 export const setupMenuStateOnLoad = () => {
   if (!menuToggleButton || !sideMenu) return
 
-  const menuOpenSaved = localStorage.getItem("menuOpen") === "true"
-
-  // Se o menu estava aberto no localStorage, abre independentemente do breakpoint
-  if (menuOpenSaved) {
-    openSideMenu()
-  } else {
-    closeSideMenu()
-  }
+  // Pequeno delay para garantir que o DOM e layout estejam prontos
+  setTimeout(() => {
+    const menuOpenSaved = localStorage.getItem("menuOpen") === "true"
+    if (menuOpenSaved) {
+      openSideMenu()
+    } else {
+      closeSideMenu()
+    }
+  }, 50)
 }
 
 // Fecha o menu automaticamente se a tela aumentar além do breakpoint
@@ -68,7 +69,6 @@ export const setupMobileLinkClicks = () => {
       const href = link.getAttribute("href")
       closeSideMenu()
 
-      // Se for link de âncora, faz scroll suave
       if (href.startsWith("#")) {
         event.preventDefault()
         const target = document.querySelector(href)
