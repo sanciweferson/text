@@ -1,23 +1,28 @@
+// menuActions.js
+
 export const menuToggleButton = document.getElementById("menu-toggle")
 export const sideMenu = document.getElementById("mobile__side")
 export const MOBILE_BREAKPOINT = 768
 
+// Abre o menu mobile
 export const openSideMenu = () => {
   sideMenu.classList.add("open")
-  menuToggleButton.innerHTML = "&times;"
+  menuToggleButton.innerHTML = "&times;" // muda para "X"
   menuToggleButton.setAttribute("aria-expanded", "true")
   sideMenu.setAttribute("aria-hidden", "false")
   localStorage.setItem("menuOpen", "true")
 }
 
+// Fecha o menu mobile
 export const closeSideMenu = () => {
   sideMenu.classList.remove("open")
-  menuToggleButton.innerHTML = "&#9776;"
+  menuToggleButton.innerHTML = "&#9776;" // muda para "☰"
   menuToggleButton.setAttribute("aria-expanded", "false")
   sideMenu.setAttribute("aria-hidden", "true")
   localStorage.setItem("menuOpen", "false")
 }
 
+// Configura o botão de toggle
 export const setupMenuToggle = () => {
   if (!menuToggleButton || !sideMenu) return
 
@@ -27,15 +32,20 @@ export const setupMenuToggle = () => {
   })
 }
 
+// Mantém o estado do menu salvo no localStorage mesmo após reload
 export const setupMenuStateOnLoad = () => {
+  if (!menuToggleButton || !sideMenu) return
+
   const menuOpenSaved = localStorage.getItem("menuOpen") === "true"
-  if (menuOpenSaved && window.innerWidth <= MOBILE_BREAKPOINT) {
+
+  if (window.innerWidth <= MOBILE_BREAKPOINT && menuOpenSaved) {
     openSideMenu()
   } else {
     closeSideMenu()
   }
 }
 
+// Fecha o menu se a tela aumentar além do breakpoint
 export const setupMenuResizeHandler = () => {
   window.addEventListener("resize", () => {
     if (
@@ -47,6 +57,7 @@ export const setupMenuResizeHandler = () => {
   })
 }
 
+// Fecha o menu ao clicar em qualquer link do mobile e faz scroll suave
 export const setupMobileLinkClicks = () => {
   if (!sideMenu) return
 
@@ -55,6 +66,8 @@ export const setupMobileLinkClicks = () => {
     link.addEventListener("click", (event) => {
       const href = link.getAttribute("href")
       closeSideMenu()
+
+      // Se for link de âncora, faz scroll suave
       if (href.startsWith("#")) {
         event.preventDefault()
         const target = document.querySelector(href)
@@ -66,4 +79,12 @@ export const setupMobileLinkClicks = () => {
       }
     })
   })
+}
+
+// Inicializa o menu
+export const initMenu = () => {
+  setupMenuToggle()
+  setupMenuStateOnLoad()
+  setupMenuResizeHandler()
+  setupMobileLinkClicks()
 }

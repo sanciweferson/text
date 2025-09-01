@@ -16,15 +16,14 @@
     </main>
     <script src="js/script.js"></script>
 
-    <script type="module">
-      import { initMenu } from "./js/mobile/menuEvents.js"
+  <script type="module">
+    import { initMenu } from "./js/mobile/menuEvents.js"
+    import { initTheme } from "./js/theme/theme.init.js"
 
-      import { initTheme } from "./js/theme/theme.init.js"
-      window.addEventListener("DOMContentLoaded", initTheme)
-
-      window.addEventListener("DOMContentLoaded", () => {
-        initMenu()
-      })
-    </script>
+    window.addEventListener("DOMContentLoaded", () => {
+      initTheme()
+      initMenu()
+    })
+  </script>
   </body>
 </html>
