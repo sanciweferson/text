@@ -1,13 +1,21 @@
 // menuActions.js
 
-export const menuToggleButton = document.getElementById("menu-toggle")
-export const sideMenu = document.getElementById("mobile__side")
 export const MOBILE_BREAKPOINT = 768
+
+// Função para pegar os elementos do menu
+const getMenuElements = () => {
+  const menuToggleButton = document.getElementById("menu-toggle")
+  const sideMenu = document.getElementById("mobile__side")
+  return { menuToggleButton, sideMenu }
+}
 
 // Abre o menu mobile
 export const openSideMenu = () => {
+  const { menuToggleButton, sideMenu } = getMenuElements()
+  if (!menuToggleButton || !sideMenu) return
+
   sideMenu.classList.add("open")
-  menuToggleButton.innerHTML = "&times;" // muda para "X"
+  menuToggleButton.innerHTML = "&times;"
   menuToggleButton.setAttribute("aria-expanded", "true")
   sideMenu.setAttribute("aria-hidden", "false")
   localStorage.setItem("menuOpen", "true")
@@ -15,8 +23,11 @@ export const openSideMenu = () => {
 
 // Fecha o menu mobile
 export const closeSideMenu = () => {
+  const { menuToggleButton, sideMenu } = getMenuElements()
+  if (!menuToggleButton || !sideMenu) return
+
   sideMenu.classList.remove("open")
-  menuToggleButton.innerHTML = "&#9776;" // muda para "☰"
+  menuToggleButton.innerHTML = "&#9776;"
   menuToggleButton.setAttribute("aria-expanded", "false")
   sideMenu.setAttribute("aria-hidden", "true")
   localStorage.setItem("menuOpen", "false")
@@ -24,6 +35,7 @@ export const closeSideMenu = () => {
 
 // Configura o botão de toggle
 export const setupMenuToggle = () => {
+  const { menuToggleButton, sideMenu } = getMenuElements()
   if (!menuToggleButton || !sideMenu) return
 
   menuToggleButton.addEventListener("click", () => {
@@ -34,7 +46,8 @@ export const setupMenuToggle = () => {
 
 // Mantém o estado do menu salvo no localStorage mesmo após reload
 export const setupMenuStateOnLoad = () => {
-  if (!menuToggleButton || !sideMenu) return
+  const { sideMenu } = getMenuElements()
+  if (!sideMenu) return
 
   // Pequeno delay para garantir que o DOM e layout estejam prontos
   setTimeout(() => {
@@ -50,6 +63,9 @@ export const setupMenuStateOnLoad = () => {
 // Fecha o menu automaticamente se a tela aumentar além do breakpoint
 export const setupMenuResizeHandler = () => {
   window.addEventListener("resize", () => {
+    const { sideMenu } = getMenuElements()
+    if (!sideMenu) return
+
     if (
       window.innerWidth > MOBILE_BREAKPOINT &&
       sideMenu.classList.contains("open")
@@ -61,6 +77,7 @@ export const setupMenuResizeHandler = () => {
 
 // Fecha o menu ao clicar em qualquer link do mobile e faz scroll suave
 export const setupMobileLinkClicks = () => {
+  const { sideMenu } = getMenuElements()
   if (!sideMenu) return
 
   const links = sideMenu.querySelectorAll("a[href]")
@@ -82,13 +99,13 @@ export const setupMobileLinkClicks = () => {
   })
 }
 
-// Inicializa o menu
+// Inicializa o menu quando o DOM e o header estiverem prontos
 export const initMenu = () => {
-  setupMenuToggle()
-  setupMenuStateOnLoad()
-  setupMenuResizeHandler()
-  setupMobileLinkClicks()
+  // Aguarda o DOM completo
+  window.addEventListener("load", () => {
+    setupMenuToggle()
+    setupMenuStateOnLoad()
+    setupMenuResizeHandler()
+    setupMobileLinkClicks()
+  })
 }
-
-// Garante que o menu só inicialize depois do DOM estar pronto
-window.addEventListener("DOMContentLoaded", initMenu)
