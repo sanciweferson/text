@@ -38,14 +38,15 @@ export const setupMenuStateOnLoad = () => {
 
   const menuOpenSaved = localStorage.getItem("menuOpen") === "true"
 
-  if (window.innerWidth <= MOBILE_BREAKPOINT && menuOpenSaved) {
+  // Se o menu estava aberto no localStorage, abre independentemente do breakpoint
+  if (menuOpenSaved) {
     openSideMenu()
   } else {
     closeSideMenu()
   }
 }
 
-// Fecha o menu se a tela aumentar além do breakpoint
+// Fecha o menu automaticamente se a tela aumentar além do breakpoint
 export const setupMenuResizeHandler = () => {
   window.addEventListener("resize", () => {
     if (
@@ -88,3 +89,6 @@ export const initMenu = () => {
   setupMenuResizeHandler()
   setupMobileLinkClicks()
 }
+
+// Garante que o menu só inicialize depois do DOM estar pronto
+window.addEventListener("DOMContentLoaded", initMenu)
